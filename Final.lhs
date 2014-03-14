@@ -49,7 +49,7 @@ Problem 0: Your Clicker ID
 
 To get your clicker points, please fill in your clicker ID below:
 
-> myClickerID = error "TBD" 
+> myClickerID = "2725BEBC" 
 
 Problem 1: Binary Search Trees Revisited
 ========================================
