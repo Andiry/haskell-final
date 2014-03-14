@@ -109,8 +109,44 @@ and functions that generate an arbitrary BST operations
 
 Write an insertion function 
 
+> updateList :: (Ord k) => k -> v -> [(k, v)] -> [(k, v)]
+> updateList k v [] = [(k, v)]
+> updateList k v (x:xs)
+>	| k == (fst x) = (k, v) : xs
+>	| k <  (fst x) = (k, v) : x : xs
+>	| otherwise    = x : updateList k v xs
+
+> findMiddle :: [(k, v)] -> (k, v)
+> findMiddle xs = (!!) xs mid
+>	where mid = (length xs) `div` 2
+
+> firstHalf :: [(k, v)] -> [(k, v)]
+> firstHalf xs = take mid xs
+>	where mid = (length xs) `div` 2
+
+> secondHalf :: [(k, v)] -> [(k, v)]
+> secondHalf xs = drop mid xs
+>	where mid = (length xs) `div` 2 + 1
+
+> formatBST :: [(k, v)] -> BST k v
+> formatBST [] = Emp
+> formatBST xs = Bind k v l r
+>	where	root = findMiddle xs
+>		k = fst root
+>		v = snd root
+>		l = formatBST $ firstHalf xs
+>		r = formatBST $ secondHalf xs
+
 > bstInsert :: (Ord k) => k -> v -> BST k v -> BST k v
-> bstInsert = error "TBD"
+> bstInsert k v Emp = Bind k v Emp Emp
+> bstInsert k v (Bind k' v' l r) = Bind k1 v1 l1 r1
+>	where	a = toBinds (Bind k' v' l r)
+>		b = updateList k v a
+>		root = findMiddle b
+>		k1 = fst root
+>		v1 = snd root
+>		l1 = formatBST $ firstHalf b
+>		r1 = formatBST $ secondHalf b
 
 such that `bstInsert k v t` inserts a key `k` with value 
 `v` into the tree `t`. If `k` already exists in the input
@@ -129,8 +165,23 @@ are done, your code should satisfy the following QC properties.
 
 Write a deletion function for BSTs of this type:
 
+> deleteList :: (Ord k) => k -> [(k, v)] -> [(k, v)]
+> deleteList _ [] = []
+> deleteList k (x:xs)
+>	| k == (fst x) = xs
+>	| k <  (fst x) = x : xs
+>	| otherwise    = x : deleteList k xs
+
 > bstDelete :: (Ord k) => k -> BST k v -> BST k v
-> bstDelete k t = error "TBD"
+> bstDelete k Emp = Emp
+> bstDelete k (Bind k' v' l r) = Bind k1 v1 l1 r1
+>	where	a = toBinds (Bind k' v' l r)
+>		b = deleteList k a
+>		root = findMiddle b
+>		k1 = fst root
+>		v1 = snd root
+>		l1 = formatBST $ firstHalf b
+>		r1 = formatBST $ secondHalf b
 
 such that `bstDelete k t` removes the key `k` from the tree `t`. 
 If `k` is absent from the input tree, then the tree is returned 
