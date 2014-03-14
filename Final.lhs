@@ -174,6 +174,9 @@ Write a deletion function for BSTs of this type:
 
 > bstDelete :: (Ord k) => k -> BST k v -> BST k v
 > bstDelete k Emp = Emp
+> bstDelete k (Bind k' v' Emp Emp)
+>	| k == k'	= Emp
+>	| otherwise	= Bind k' v' Emp Emp
 > bstDelete k (Bind k' v' l r) = Bind k1 v1 l1 r1
 >	where	a = toBinds (Bind k' v' l r)
 >		b = deleteList k a
