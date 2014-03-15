@@ -215,7 +215,7 @@ We say that a tree is *balanced* if
 Write a balanced tree generator 
 
 > genBal :: Gen (BST Int Char)
-> genBal = error "TBD"
+> genBal = liftM ofBSTops $ listOf $ genBSTadd
 
 such that
 
