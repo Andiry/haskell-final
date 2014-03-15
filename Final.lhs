@@ -116,26 +116,13 @@ Write an insertion function
 >	| k <  (fst x) = (k, v) : x : xs
 >	| otherwise    = x : updateList k v xs
 
-> findMiddle :: [(k, v)] -> (k, v)
-> findMiddle xs = (!!) xs mid
->	where mid = (length xs) `div` 2
-
-> firstHalf :: [(k, v)] -> [(k, v)]
-> firstHalf xs = take mid xs
->	where mid = (length xs) `div` 2
-
-> secondHalf :: [(k, v)] -> [(k, v)]
-> secondHalf xs = drop mid xs
->	where mid = (length xs) `div` 2 + 1
-
 > formatBST :: [(k, v)] -> BST k v
 > formatBST [] = Emp
 > formatBST xs = Bind k v l r
->	where	root = findMiddle xs
->		k = fst root
->		v = snd root
->		l = formatBST $ firstHalf xs
->		r = formatBST $ secondHalf xs
+>	where	mid = (length xs) `div` 2
+>		(k, v) = (!!) xs mid
+>		l = formatBST $ take mid xs
+>		r = formatBST $ drop (mid + 1) xs
 
 > bstInsert :: (Ord k) => k -> v -> BST k v -> BST k v
 > bstInsert k v Emp = Bind k v Emp Emp
