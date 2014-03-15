@@ -155,10 +155,7 @@ Write a deletion function for BSTs of this type:
 >	| otherwise    = x : deleteList k xs
 
 > bstDelete :: (Ord k) => k -> BST k v -> BST k v
-> bstDelete k Emp = Emp
-> bstDelete k (Bind k' v' Emp Emp)
->	| k == k'	= Emp
->	| otherwise	= Bind k' v' Emp Emp
+> bstDelete _ Emp = Emp
 > bstDelete k (Bind k' v' l r) = formatBST new_list
 >	where	list	 = toBinds (Bind k' v' l r)
 >		new_list = deleteList k list
