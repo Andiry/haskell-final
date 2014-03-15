@@ -140,13 +140,13 @@ Write an insertion function
 > bstInsert :: (Ord k) => k -> v -> BST k v -> BST k v
 > bstInsert k v Emp = Bind k v Emp Emp
 > bstInsert k v (Bind k' v' l r) = Bind k1 v1 l1 r1
->	where	a = toBinds (Bind k' v' l r)
->		b = updateList k v a
->		root = findMiddle b
->		k1 = fst root
->		v1 = snd root
->		l1 = formatBST $ firstHalf b
->		r1 = formatBST $ secondHalf b
+>	where	list	 = toBinds (Bind k' v' l r)
+>		new_list = updateList k v list
+>		root	 = findMiddle new_list
+>		k1	 = fst root
+>		v1	 = snd root
+>		l1	 = formatBST $ firstHalf new_list
+>		r1	 = formatBST $ secondHalf new_list
 
 such that `bstInsert k v t` inserts a key `k` with value 
 `v` into the tree `t`. If `k` already exists in the input
@@ -178,13 +178,13 @@ Write a deletion function for BSTs of this type:
 >	| k == k'	= Emp
 >	| otherwise	= Bind k' v' Emp Emp
 > bstDelete k (Bind k' v' l r) = Bind k1 v1 l1 r1
->	where	a = toBinds (Bind k' v' l r)
->		b = deleteList k a
->		root = findMiddle b
->		k1 = fst root
->		v1 = snd root
->		l1 = formatBST $ firstHalf b
->		r1 = formatBST $ secondHalf b
+>	where	list	 = toBinds (Bind k' v' l r)
+>		new_list = deleteList k list
+>		root	 = findMiddle new_list
+>		k1	 = fst root
+>		v1	 = snd root
+>		l1	 = formatBST $ firstHalf new_list
+>		r1	 = formatBST $ secondHalf new_list
 
 such that `bstDelete k t` removes the key `k` from the tree `t`. 
 If `k` is absent from the input tree, then the tree is returned 
