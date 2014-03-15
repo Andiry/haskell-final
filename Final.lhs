@@ -255,18 +255,24 @@ Before defining any operations on your finite channel, you need to
 change the representation of finite channels from the following
 obviously incorrect one:
 
-> data FiniteChan a = Chan ()
+> data FiniteChan a = Chan Int (TVar ([a], Int))
 
 Next, define an operation for creating a finite channel of a
 particular capacity:
 
 > newFiniteChan :: Int -> IO (FiniteChan a)
-> newFiniteChan capacity = error "TODO"
+> newFiniteChan capacity = do tv <- atomically $ newTVar ([], 0)
+>			      return $ Chan capacity tv
 
 Next, define the operation for reading from the queue:
 
 > readFiniteChan :: FiniteChan a -> IO a
-> readFiniteChan t = error "TODO"
+> readFiniteChan (Chan c tv) = atomically $ do
+>		(l, n) <- readTVar tv
+>		case n of
+>			0 	  -> retry
+>			otherwise -> do writeTVar tv (tail l, n - 1)
+>					return $ head l
 
 Remember that reads should block in the case where the channel is
 empty.
@@ -274,7 +280,10 @@ empty.
 Finally, define the operation for writing to the queue:
 
 > writeFiniteChan :: FiniteChan a -> a -> IO ()
-> writeFiniteChan t x = error "TODO"
+> writeFiniteChan (Chan c tv) x = atomically $ do
+>		(l, n) <- readTVar tv
+>		if n == c then retry
+>			  else writeTVar tv (l ++ [x], n + 1)
 
 Remember that writes should block in the case where the channel is at
 capacity.
