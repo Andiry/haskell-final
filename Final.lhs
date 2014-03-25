@@ -950,21 +950,3 @@ Appendix: Code for Type Inference from Lecture
 >                             PP.hcat (PP.punctuate PP.comma (map prTVbl as))
 >                             PP.<> PP.text "." PP.<+> prType t
 
-> e0  =  ELet (EV "id") (EAbs (EV "x") (EVbl (EV "x")))
->        (EVbl (EV "id"))
-
-> e1  =  ELet (EV "id") (EAbs (EV "x") (EVbl (EV "x")))
->         (EApp (EVbl (EV "id")) (EVbl (EV "id")))
-
-> e2  =  ELet (EV "id") (EAbs (EV "x") (ELet (EV "y") (EVbl (EV "x")) (EVbl (EV "y"))))
->        (EApp (EVbl (EV "id")) (EVbl (EV "id")))
-
-> e3  =  ELet (EV "id") (EAbs (EV "x") (ELet (EV "y") (EVbl (EV "x")) (EVbl (EV "y"))))
->         (EApp (EApp (EVbl (EV "id")) (EVbl (EV "id"))) (ELit (LInt 2)))
-
-> e4  =  ELet (EV "id") (EAbs (EV "x") (EApp (EVbl (EV "x")) (EVbl (EV "x"))))
->         (EVbl (EV "id"))
-
-> e5  =  EAbs (EV "m") (ELet (EV "y") (EVbl (EV "m"))
->                     (ELet (EV "x") (EApp (EVbl (EV "y")) (ELit (LBool True)))
->                          (EVbl (EV "x"))))
